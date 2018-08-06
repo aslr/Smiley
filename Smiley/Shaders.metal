@@ -14,10 +14,10 @@
 // Including header shared between this Metal shader code and Swift/C code executing Metal API commands
 #import "ShaderTypes.h"
 
-// Original Shadertoy shader code
-// float Circle(vec2 uv, float r, float blur
+// Original ShaderToy shader code
+// float Circle(vec2 uv, vec2 p, float r, float blur
 // {
-//     float d = length(uv9;
+//     float d = length(uv-p;
 //     float c = smoothstep(r, r-blur, d);
 //     return c;
 // }
@@ -27,15 +27,15 @@
 //     vec2 uv = fragCoord.xy / iResoltution.xy;
 //     uv -= .5;
 //     uv.x *= iResolution.x/iResolution.y;
-//     float c = Circle(uv, .4, .05);
+//     float c = Circle(uv, p, .4, .05);
 //     fragColor = vec4(vec3(c),1.0);
 // }
 
 using namespace metal;
 
-float Circle(float2 uv, float r, float blur)
+float Circle(float2 uv, float2 p, float r, float blur)
 {
-    float d = length(uv);
+    float d = length(uv - p);
     float c = smoothstep(r, r - blur, d);
     return c;
 }
@@ -57,8 +57,8 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv -= 0.5;  // -0.5 <> 0.5
     uv.x *= iResolution.x/iResolution.y;
     
-    // make a circle with smoothstep
-    float c = Circle(uv, .4, .05);
+    // make a circle with smoothstep and position it on the viewport
+    float c = Circle(uv, float2(.2,-.1), .4, .05);
     
     // return the "fragColor" by using the w element of the float4 used for time
     output.write(float4(float3(c), 1), gid);
