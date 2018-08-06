@@ -14,24 +14,30 @@
 // Including header shared between this Metal shader code and Swift/C code executing Metal API commands
 #import "ShaderTypes.h"
 
+// Original Shadertoy shader code
+// void mainImage( out vec4 fragColor, in vec2 fragCoord )
+// {
+//     vec2 uv = fragCoord.xy / iResoltution.xy
+//     fragColor = vec4(uv, 0.5+0.5*sin(iGlobaltime),1.0)
+// }
+
 using namespace metal;
 
-float dist(float2 point, float2 center, float radius)
-{
-    return length(point - center) - radius;
-}
-
-kernel void compute(texture2d<float,
-                    access::write> output [[texture(0)]],
+kernel void compute(texture2d<float,access::write> output [[texture(0)]],
+                    constant float4 &time [[buffer(0)]],
                     uint2 gid [[thread_position_in_grid]])
 {
+    // get the width and height of the screen texture
     int width = output.get_width();
     int height = output.get_height();
-    float red = float(gid.x) / float(width);
-    float green = float(gid.y) / float(height);
-    float2 uv = float2(gid) / float2(width, height);
-    uv = uv * 2.0 - 1.0;                                // position of the circle
-    float distanceToCircle = dist(uv, float2(0), 0.5);  // distance from the circle based on the diameter of it
-    bool inside = distanceToCircle < 0;
-    output.write(inside ? float4(0) : float4(red, green, 0, 1), gid);
+    
+    // set its resolution
+    float2 iResolution = float2(width, height);
+    
+    // compute the texture coordinates with the y-coordinate flipped
+    // because the origin of Shadertoy's and Metal's y-coordinates differ
+    float2 uv = float2(gid.x,height - gid.y) / iResolution;
+    
+    // return the "fragColor" by using the w element of the float4 used for time
+    output.write(float4(uv,0.5+0.5*sin(time.w), 1.0), gid);
 }

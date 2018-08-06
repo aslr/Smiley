@@ -11,7 +11,6 @@
 		845EB64E21171B47007F4DD1 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845EB64D21171B47007F4DD1 /* GameViewController.swift */; };
 		845EB65021171B47007F4DD1 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845EB64F21171B47007F4DD1 /* Renderer.swift */; };
 		845EB65221171B47007F4DD1 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 845EB65121171B47007F4DD1 /* Shaders.metal */; };
-		845EB65521171B49007F4DD1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 845EB65421171B49007F4DD1 /* Assets.xcassets */; };
 		845EB65821171B49007F4DD1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 845EB65621171B49007F4DD1 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -22,7 +21,6 @@
 		845EB64F21171B47007F4DD1 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		845EB65121171B47007F4DD1 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		845EB65321171B48007F4DD1 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
-		845EB65421171B49007F4DD1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		845EB65721171B49007F4DD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		845EB65921171B49007F4DD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		845EB65A21171B49007F4DD1 /* Smiley.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Smiley.entitlements; sourceTree = "<group>"; };
@@ -63,7 +61,6 @@
 				845EB64F21171B47007F4DD1 /* Renderer.swift */,
 				845EB65121171B47007F4DD1 /* Shaders.metal */,
 				845EB65321171B48007F4DD1 /* ShaderTypes.h */,
-				845EB65421171B49007F4DD1 /* Assets.xcassets */,
 				845EB65621171B49007F4DD1 /* Main.storyboard */,
 				845EB65921171B49007F4DD1 /* Info.plist */,
 				845EB65A21171B49007F4DD1 /* Smiley.entitlements */,
@@ -129,7 +126,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				845EB65521171B49007F4DD1 /* Assets.xcassets in Resources */,
 				845EB65821171B49007F4DD1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
