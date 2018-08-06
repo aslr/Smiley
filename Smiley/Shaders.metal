@@ -21,8 +21,8 @@
 //     uv -= .5;
 //     uv.x *= iResolution.x/iResolution.y;
 //     float d = length(uv);
-//     float c = d;
-//     if (d < .3) c = 1.; else c = 0.;
+//     float r = 0.3;
+//     float c = smoothstep(r, r-0.01, d);
 //     fragColor = vec4(vec3(c),1.0);
 // }
 
@@ -45,11 +45,10 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv -= 0.5;  // -0.5 <> 0.5
     uv.x *= iResolution.x/iResolution.y;
     
+    // make a circle with smoothstep
     float d = length(uv);
-    float c = d;
-    
-    // make a white circle on a black background
-    if (d < .3) c = 1.; else c = 0.;
+    float r = 0.3;
+    float c = smoothstep(r, r-0.01, d);
     
     // return the "fragColor" by using the w element of the float4 used for time
     output.write(float4(float3(c), 1), gid);
