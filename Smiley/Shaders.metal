@@ -19,6 +19,7 @@
 // {
 //     vec2 uv = fragCoord.xy / iResoltution.xy;
 //     uv -= .5;
+//     uv.x *= iResolution.x/iResolution.y;
 //     float d = length(uv);
 //     float c = d;
 //     if (d < .3) c = 1.; else c = 0.;
@@ -36,12 +37,13 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     int height = output.get_height();
     
     // set its resolution
-    float2 iResolution = float2(width, height);
+    float2 iResolution = float2(width, height);  // 0 <> 1
     
     // compute the texture coordinates with the y-coordinate flipped
     // because the origin of Shadertoy's and Metal's y-coordinates differ
     float2 uv = float2(gid.x,height - gid.y) / iResolution;
-    uv -= 0.5;
+    uv -= 0.5;  // -0.5 <> 0.5
+    uv.x *= iResolution.x/iResolution.y;
     
     float d = length(uv);
     float c = d;
