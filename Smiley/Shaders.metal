@@ -28,16 +28,16 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
                     uint2 gid [[thread_position_in_grid]])
 {
     // get the width and height of the screen texture
-    int width = output.get_width();
-    int height = output.get_height();
+    // int width = output.get_width();
+    // int height = output.get_height();
     
     // set its resolution
-    float2 iResolution = float2(width, height);
+    // float2 iResolution = float2(width, height);
     
     // compute the texture coordinates with the y-coordinate flipped
     // because the origin of Shadertoy's and Metal's y-coordinates differ
-    float2 uv = float2(gid.x,height - gid.y) / iResolution;
+    // float2 uv = float2(gid.x,height - gid.y) / iResolution;
     
     // return the "fragColor" by using the w element of the float4 used for time
-    output.write(float4(uv,0.5+0.5*sin(time.w), 1.0), gid);
+    output.write(float4(0, 0, 0, 1), gid);
 }
