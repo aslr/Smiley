@@ -18,7 +18,7 @@
 // void mainImage( out vec4 fragColor, in vec2 fragCoord )
 // {
 //     vec2 uv = fragCoord.xy / iResoltution.xy
-//     fragColor = vec4(uv, 0.5+0.5*sin(iGlobaltime),1.0)
+//     fragColor = vec4(uv.y, 0., 0.,1.0)
 // }
 
 using namespace metal;
@@ -39,5 +39,5 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     float2 uv = float2(gid.x,height - gid.y) / iResolution;
     
     // return the "fragColor" by using the w element of the float4 used for time
-    output.write(float4(uv.x, 0, 0, 1), gid);
+    output.write(float4(uv.y, 0, 0, 1), gid);
 }
