@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8413740E21189891003B83D5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 8413740D21189891003B83D5 /* README.md */; };
+		8413741021190F71003B83D5 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 8413740F21190F70003B83D5 /* LICENSE */; };
 		845EB64C21171B47007F4DD1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845EB64B21171B47007F4DD1 /* AppDelegate.swift */; };
 		845EB64E21171B47007F4DD1 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845EB64D21171B47007F4DD1 /* GameViewController.swift */; };
 		845EB65021171B47007F4DD1 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845EB64F21171B47007F4DD1 /* Renderer.swift */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		8413740D21189891003B83D5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		8413740F21190F70003B83D5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		845EB64821171B47007F4DD1 /* Smiley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Smiley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		845EB64B21171B47007F4DD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		845EB64D21171B47007F4DD1 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +45,7 @@
 			isa = PBXGroup;
 			children = (
 				8413740D21189891003B83D5 /* README.md */,
+				8413740F21190F70003B83D5 /* LICENSE */,
 				845EB64A21171B47007F4DD1 /* Smiley */,
 				845EB64921171B47007F4DD1 /* Products */,
 			);
@@ -129,6 +132,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8413741021190F71003B83D5 /* LICENSE in Resources */,
 				8413740E21189891003B83D5 /* README.md in Resources */,
 				845EB65821171B49007F4DD1 /* Main.storyboard in Resources */,
 			);
