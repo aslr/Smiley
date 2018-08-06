@@ -10,7 +10,7 @@ git checkout <tag>
 
 Each tutorial has its own branch. Checkout the corresponding branch to follow each tutorial. For tutorial #1 do:
 
-git checkout tutorial1
+git checkout tutorial-1
 
 To see the videos that inspired this project, please check Art of Code's tutorials here:
 
