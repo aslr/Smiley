@@ -6,6 +6,7 @@ A Xcode 10 / Swift 4.2 project to replicate Shadertoy code in Metal
 To accompany this tutorail step by step type in Terminal:
 
 git fetch --all --tags --prune
+
 git checkout <i>tag</i>
 
 Each tutorial has its own branch. Checkout the corresponding branch to follow each tutorial. For tutorial #1 do:
