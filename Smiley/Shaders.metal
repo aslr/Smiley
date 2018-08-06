@@ -73,7 +73,10 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     // subtract the mouth from the mask
     float mouth = Circle(uv, float2(0.,0.), .3, .02);
     mouth -= Circle(uv, float2(0.,.1), .3, .02);
-    mask -= mouth;
+    
+    // use max to avoid negative colors and remove the weird effect
+    // near the eyes (thanks to ocdy1001)
+    mask -= max(mouth,0.);
     
     // return the "fragColor" by multiplying yellow by the circle mask
     col = float3(1.,1.,0.) * mask;
