@@ -27,9 +27,14 @@
 //     vec2 uv = fragCoord.xy / iResoltution.xy;
 //     uv -= .5;
 //     uv.x *= iResolution.x/iResolution.y;
-//     float c = Circle(uv, vec2(0), .4, .05);
-//     c -= Circle(uv, vec2(-.13,.2),.07, .01);
-//     c -= Circle(uv, vec2(.13,.2),.07, .01);
+//     vec3 col = vec3(0.);
+//     float mask = Circle(uv, vec2(0), .4, .05);
+//     mask -= Circle(uv, vec2(-.13,.2),.07, .01);
+//     mask -= Circle(uv, vec2(.13,.2),.07, .01);
+//     float mouth = Circle(uv, vec2(0.,0.), .3, .02);
+//     mouth -= Circle(uv, vec2(0.,.1), .3, .02);
+//     mask -= mouth;
+//     col = vec3(1.,1.,0)*mask;
 //     fragColor = vec4(vec3(c),1.0);
 // }
 
@@ -59,11 +64,18 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv -= 0.5;  // -0.5 <> 0.5
     uv.x *= iResolution.x/iResolution.y;
     
-    // make a circle with two holes (eyes)
-    float c = Circle(uv, float2(0), .4, .05);
-    c -= Circle(uv, float2(-.13,.2),.07, .01);
-    c -= Circle(uv, float2(.13,.2),.07, .01);
+    // make a yellow circle with two holes (eyes)
+    float3 col = float3(0.);
+    float mask = Circle(uv, float2(0), .4, .05);
+    mask -= Circle(uv, float2(-.13,.2),.07, .01);
+    mask -= Circle(uv, float2(.13,.2),.07, .01);
     
-    // return the "fragColor" by using the w element of the float4 used for time
-    output.write(float4(float3(c), 1), gid);
+    // subtract the mouth from the mask
+    float mouth = Circle(uv, float2(0.,0.), .3, .02);
+    mouth -= Circle(uv, float2(0.,.1), .3, .02);
+    mask -= mouth;
+    
+    // return the "fragColor" by multiplying yellow by the circle mask
+    col = float3(1.,1.,0.) * mask;
+    output.write(float4(col, 1), gid);
 }
