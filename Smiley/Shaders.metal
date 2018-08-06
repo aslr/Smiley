@@ -17,8 +17,10 @@
 // Original Shadertoy shader code
 // void mainImage( out vec4 fragColor, in vec2 fragCoord )
 // {
-//     vec2 uv = fragCoord.xy / iResoltution.xy
-//     fragColor = vec4(uv.x, uv.x, 0.,1.0)
+//     vec2 uv = fragCoord.xy / iResoltution.xy;
+//     float d = length(uv);
+//     float c = d
+//     fragColor = vec4(vec3(c),1.0);
 // }
 
 using namespace metal;
@@ -38,6 +40,9 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     // because the origin of Shadertoy's and Metal's y-coordinates differ
     float2 uv = float2(gid.x,height - gid.y) / iResolution;
     
+    float d = length(uv);
+    float c = d;
+    
     // return the "fragColor" by using the w element of the float4 used for time
-    output.write(float4(uv.x, uv.y, 0, 1), gid);
+    output.write(float4(float3(c), 1), gid);
 }
