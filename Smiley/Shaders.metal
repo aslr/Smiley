@@ -28,7 +28,7 @@
 //     uv -= .5;
 //     uv.x *= iResolution.x/iResolution.y;
 //     float c = Circle(uv, vec2(.2,-.1), .4, .05);
-//     c += Circle(uv, vec2(-.5,.2),.1, .01);
+//     c -= Circle(uv, vec2(.1,.2),.1, .01);
 //     fragColor = vec4(vec3(c),1.0);
 // }
 
@@ -60,7 +60,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     
     // make two circles with smoothstep and position them on the viewport
     float c = Circle(uv, float2(.2,-.1), .4, .05);
-    c += Circle(uv, float2(-.5,.2), .1, .01);
+    c -= Circle(uv, float2(.1,.2), .1, .01);
     
     // return the "fragColor" by using the w element of the float4 used for time
     output.write(float4(float3(c), 1), gid);
