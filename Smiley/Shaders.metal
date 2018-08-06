@@ -20,7 +20,8 @@
 //     vec2 uv = fragCoord.xy / iResoltution.xy;
 //     uv -= .5;
 //     float d = length(uv);
-//     float c = d
+//     float c = d;
+//     if (d < .3) c = 1.; else c = 0.;
 //     fragColor = vec4(vec3(c),1.0);
 // }
 
@@ -44,6 +45,9 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     
     float d = length(uv);
     float c = d;
+    
+    // make a white circle on a black background
+    if (d < .3) c = 1.; else c = 0.;
     
     // return the "fragColor" by using the w element of the float4 used for time
     output.write(float4(float3(c), 1), gid);
