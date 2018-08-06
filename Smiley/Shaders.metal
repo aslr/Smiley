@@ -39,5 +39,5 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     // float2 uv = float2(gid.x,height - gid.y) / iResolution;
     
     // return the "fragColor" by using the w element of the float4 used for time
-    output.write(float4(0, 0, 0, 1), gid);
+    output.write(float4(1, 0, 0, 1), gid);
 }
