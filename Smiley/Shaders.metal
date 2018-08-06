@@ -15,18 +15,30 @@
 #import "ShaderTypes.h"
 
 // Original Shadertoy shader code
+// float Circle(vec2 uv, float r, float blur
+// {
+//     float d = length(uv9;
+//     float c = smoothstep(r, r-blur, d);
+//     return c;
+// }
+//
 // void mainImage( out vec4 fragColor, in vec2 fragCoord )
 // {
 //     vec2 uv = fragCoord.xy / iResoltution.xy;
 //     uv -= .5;
 //     uv.x *= iResolution.x/iResolution.y;
-//     float d = length(uv);
-//     float r = 0.3;
-//     float c = smoothstep(r, r-0.1, d);
+//     float c = Circle(uv, .4, .05);
 //     fragColor = vec4(vec3(c),1.0);
 // }
 
 using namespace metal;
+
+float Circle(float2 uv, float r, float blur)
+{
+    float d = length(uv);
+    float c = smoothstep(r, r - blur, d);
+    return c;
+}
 
 kernel void compute(texture2d<float,access::write> output [[texture(0)]],
                     constant float4 &time [[buffer(0)]],
@@ -46,9 +58,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv.x *= iResolution.x/iResolution.y;
     
     // make a circle with smoothstep
-    float d = length(uv);
-    float r = 0.3;
-    float c = smoothstep(r, r-0.1, d);
+    float c = Circle(uv, .4, .05);
     
     // return the "fragColor" by using the w element of the float4 used for time
     output.write(float4(float3(c), 1), gid);
