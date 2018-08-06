@@ -18,6 +18,7 @@
 // void mainImage( out vec4 fragColor, in vec2 fragCoord )
 // {
 //     vec2 uv = fragCoord.xy / iResoltution.xy;
+//     uv -= .5;
 //     float d = length(uv);
 //     float c = d
 //     fragColor = vec4(vec3(c),1.0);
@@ -39,6 +40,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     // compute the texture coordinates with the y-coordinate flipped
     // because the origin of Shadertoy's and Metal's y-coordinates differ
     float2 uv = float2(gid.x,height - gid.y) / iResolution;
+    uv -= 0.5;
     
     float d = length(uv);
     float c = d;
