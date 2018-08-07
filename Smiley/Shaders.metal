@@ -83,8 +83,9 @@ float4 Mouth(float2 uv)
     col.a = S(.5, .48, d);
     // teeth
     float td = length(uv-float2(0., .6));
-    // blend with white
-    col.rgb = mix(col.rgb, float3(1.), S(.4,.37,td));
+    // blend with white and add drop shadow
+    float3 toothCol = float3(1.)*S(.6, .35, d);
+    col.rgb = mix(col.rgb, toothCol, S(.4,.37,td));
     return col;
 }
 
