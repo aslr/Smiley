@@ -86,6 +86,10 @@ float4 Mouth(float2 uv)
     // blend with white and add drop shadow
     float3 toothCol = float3(1.)*S(.6, .35, d);
     col.rgb = mix(col.rgb, toothCol, S(.4,.37,td));
+    // make tongue
+    td = length(uv+float2(0., .5));
+    // blend with tongue color and carve it out with smoothstep
+    col.rgb = mix(col.rgb, float3(1., .5, .5), S(.5, .2, td));
     return col;
 }
 
