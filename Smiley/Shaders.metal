@@ -70,7 +70,14 @@ float4 Eye(float2 uv)
 
 float4 Mouth(float2 uv)
 {
-    float4 col = float4(0.);
+    // normalize coordinates
+    uv -= .5;
+    // dark red color for the mouth
+    float4 col = float4(.5, .18, .05, 1.);
+    
+    // blur the edge of the mouth
+    float d = length(uv);
+    col.a = S(.5, .48, d);
     return col;
 }
 
@@ -124,10 +131,13 @@ float4 Smiley(float2 uv)
     
     // make and place the eyes
     float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)));
+    // make and place the mouth (use the rect (float4) to make it oval)
+    float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)));
     
     // blend everything
     col = mix(col, head, head.a);
     col = mix(col, eye, eye.a);
+    col = mix(col, mouth, mouth.a);
     return col;
 }
 
