@@ -22,18 +22,25 @@
 //     return c;
 // }
 //
+// float Smiley(vec2 uv, vec2 p, float size)
+// {
+//     uv -= p;
+//     float mask = Circle(uv, vec2(0.), .4, .05);
+//     mask -= Circle(uv, vec2(-.13,.2),.07, .01);
+//     mask -= Circle(uv, vec2(.13,.2),.07, .01);
+//     float mouth = Circle(uv, vec2(0.,0.), .3, .02);
+//     mouth -= Circle(uv, vec2(0.,.1), .3, .02);
+//     mask -= mouth;
+//     return mask;
+// }
+//
 // void mainImage( out vec4 fragColor, in vec2 fragCoord )
 // {
 //     vec2 uv = fragCoord.xy / iResoltution.xy;
 //     uv -= .5;
 //     uv.x *= iResolution.x/iResolution.y;
 //     vec3 col = vec3(0.);
-//     float mask = Circle(uv, vec2(0), .4, .05);
-//     mask -= Circle(uv, vec2(-.13,.2),.07, .01);
-//     mask -= Circle(uv, vec2(.13,.2),.07, .01);
-//     float mouth = Circle(uv, vec2(0.,0.), .3, .02);
-//     mouth -= Circle(uv, vec2(0.,.1), .3, .02);
-//     mask -= mouth;
+//     float mask = Smiley(uv, vec2(0., .1), 1.);
 //     col = vec3(1.,1.,0)*mask;
 //     fragColor = vec4(vec3(c),1.0);
 // }
@@ -45,6 +52,28 @@ float Circle(float2 uv, float2 p, float r, float blur)
     float d = length(uv - p);
     float c = smoothstep(r, r - blur, d);
     return c;
+}
+
+float Smiley(float2 uv, float2 p, float size)
+{
+    // remap the coordinates to move smiley around
+    uv -= p;
+    
+    // make the smiley shape
+    float mask = Circle(uv, float2(0.), .4, .05);
+    
+    // make the eyes (holes)
+    mask -= Circle(uv, float2(-.13,.2),.07, .01);
+    mask -= Circle(uv, float2(.13,.2),.07, .01);
+    
+    // make the mouth
+    float mouth = Circle(uv, float2(0.,0.), .3, .02);
+    mouth -= Circle(uv, float2(0.,.1), .3, .02);
+    
+    // use max to avoid negative colors and remove the weird effect
+    // near the eyes (thanks to ocdy1001)
+    mask -= max(mouth,0.);
+    return mask;
 }
 
 kernel void compute(texture2d<float,access::write> output [[texture(0)]],
@@ -64,21 +93,10 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv -= 0.5;  // -0.5 <> 0.5
     uv.x *= iResolution.x/iResolution.y;
     
-    // make a yellow circle with two holes (eyes)
-    float3 col = float3(0.);
-    float mask = Circle(uv, float2(0), .4, .05);
-    mask -= Circle(uv, float2(-.13,.2),.07, .01);
-    mask -= Circle(uv, float2(.13,.2),.07, .01);
+    // make a smiley
+    float mask = Smiley(uv, float2(0., .1), 1.);
     
-    // subtract the mouth from the mask
-    float mouth = Circle(uv, float2(0.,0.), .3, .02);
-    mouth -= Circle(uv, float2(0.,.1), .3, .02);
-    
-    // use max to avoid negative colors and remove the weird effect
-    // near the eyes (thanks to ocdy1001)
-    mask -= max(mouth,0.);
-    
-    // return the "fragColor" by multiplying yellow by the circle mask
-    col = float3(1.,1.,0.) * mask;
+    // return the "fragColor" by multiplying yellow by the smiley mask
+    float3 col = float3(1.,1.,0.) * mask;
     output.write(float4(col, 1), gid);
 }
