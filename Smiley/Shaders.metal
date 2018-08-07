@@ -21,10 +21,11 @@
 //     float c = smoothstep(r, r-blur, d);
 //     return c;
 // }
-//
+//Smil
 // float Smiley(vec2 uv, vec2 p, float size)
 // {
 //     uv -= p;
+//     uv /= size;
 //     float mask = Circle(uv, vec2(0.), .4, .05);
 //     mask -= Circle(uv, vec2(-.13,.2),.07, .01);
 //     mask -= Circle(uv, vec2(.13,.2),.07, .01);
@@ -58,6 +59,9 @@ float Smiley(float2 uv, float2 p, float size)
 {
     // remap the coordinates to move smiley around
     uv -= p;
+    
+    // scale the smiley by resizing the coordinate system
+    uv /= size;
     
     // make the smiley shape
     float mask = Circle(uv, float2(0.), .4, .05);
@@ -94,7 +98,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv.x *= iResolution.x/iResolution.y;
     
     // make a smiley
-    float mask = Smiley(uv, float2(0., .1), 1.);
+    float mask = Smiley(uv, float2(0.,0.), .5);
     
     // return the "fragColor" by multiplying yellow by the smiley mask
     float3 col = float3(1.,1.,0.) * mask;
