@@ -81,6 +81,10 @@ float4 Mouth(float2 uv)
     // blur the edge of the mouth
     float d = length(uv);
     col.a = S(.5, .48, d);
+    // teeth
+    float td = length(uv-float2(0., .6));
+    // blend with white
+    col.rgb = mix(col.rgb, float3(1.), S(.4,.37,td));
     return col;
 }
 
