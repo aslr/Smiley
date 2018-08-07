@@ -3,7 +3,7 @@ Shadertoy to Metal
 
 A Xcode 10 / Swift 4.2 project to replicate Shadertoy code in Metal based on Martijn Steinrucken's (The Art of Code) tutorials on YouTube. See links below.
 
-To accompany this tutorail step by step type in Terminal:
+To accompany this tutorial step by step type in Terminal:
 
 git fetch --all --tags --prune
 
