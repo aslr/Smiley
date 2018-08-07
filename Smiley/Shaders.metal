@@ -102,6 +102,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     float y = uv.y-m;
     
     float blur = remap(-.5, .5, .01, .25, x);
+    blur = pow(blur, 2.);
     float mask = Rect(float2(x,y), -.5, .5, -.1, .1, blur);
     
     // return the "fragColor" by multiplying white by the gradient mask
