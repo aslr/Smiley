@@ -48,7 +48,9 @@ float4 Head(float2 uv)
     float d = length(uv);
     col.r = S(.5, .49, d);
     float edgeShade = remap01(.35, .5, d);
-    col.rgb *= 1 - edgeShade;
+    
+    // edgeshade with an attenuated falloff
+    col.rgb *= 1 - edgeShade * .5;
     return col;
 }
 
