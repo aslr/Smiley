@@ -81,10 +81,10 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     
     // don't make a smiley
     // float mask = Smiley(uv, float2(0.,0.), .5);
-    // instead make a concave wave
+    // instead make a less concave wave
     float x = uv.x;
     float m = -(x-.5)*(x+.5);
-    m=4 * m * m;
+    m=.5 * m * m;
     float y = uv.y-m;
     // tapered at the top
     
