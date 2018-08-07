@@ -74,6 +74,8 @@ float4 Mouth(float2 uv)
     uv -= .5;
     // dark red color for the mouth
     float4 col = float4(.5, .18, .05, 1.);
+    // scale the mouth down
+    uv.y *= 1.5;
     // pull the mouth corners up
     uv.y -= uv.x * uv.x * 2;
     // blur the edge of the mouth
