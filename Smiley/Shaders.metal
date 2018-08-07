@@ -68,6 +68,12 @@ float4 Head(float2 uv)
     highlight *= remap(.41, -.1, .75, .0, uv.y);
     col.rgb = mix(col.rgb, float3(1.), highlight);
     
+    // position of one cheek
+    d = length(uv-float2(.25,-.2));
+    // make it into a circle and attenuate it by 60%
+    float cheek = S(.2,.1, d) * .4;
+    // blend the background with a reddish color
+    col.rgb = mix(col.rgb, float3(1., .1, .1), cheek);
     return col;
 }
 
