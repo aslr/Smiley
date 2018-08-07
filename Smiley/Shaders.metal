@@ -81,8 +81,12 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     
     // don't make a smiley
     // float mask = Smiley(uv, float2(0.,0.), .5);
-    // instead make a rectangle and scale it down my multiplying uv by a value;
-    float mask = Rect(uv * 1.5, -.2, .2, -.3, .3, .01);
+    // instead make a rectangle
+    float x = uv.x;
+    float y = uv.y;
+    // and distort it
+    x += y;
+    float mask = Rect(float2(x,y), -.2, .2, -.3, .3, .01);
     
     // return the "fragColor" by multiplying whilte by the gradient mask
     float3 col = float3(1.,1.,1.) * mask;
