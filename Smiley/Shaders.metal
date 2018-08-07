@@ -30,9 +30,21 @@ float remap(float a, float b, float c, float d, float t)
     return sat(((t-a)/(b-a) * (d-c) + c));
 }
 
+// remap in 2D
+float2 within(float2 uv, float4 rect)
+{
+    return (uv-rect.xy)/(rect.zw-rect.xy);
+}
+
 float4 Eye(float2 uv)
 {
-    float4 col = float4(0.);
+    // remap the coordinates to center at 0.
+    uv -= .5;
+    // paint white
+    float4 col = float4(1.);
+    // make the circle
+    float d = length(uv);
+    col.a = S(.5, .48, d);
     return col;
 }
 
@@ -88,9 +100,14 @@ float4 Smiley(float2 uv)
     
     // mirror the left with the right side, so that the cheeks are mirrored
     uv.x = abs(uv.x);
-    
     float4 head = Head(uv);
+    
+    // make and place the eyes
+    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)));
+    
+    // blend everything
     col = mix(col, head, head.a);
+    col = mix(col, eye, eye.a);
     return col;
 }
 
