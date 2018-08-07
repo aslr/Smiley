@@ -47,9 +47,9 @@ float4 Eye(float2 uv)
     float4 irisCol = float4(.3,.5,1.,1.);
     // blend the white and the iris colors and attenuate the latter by half
     float4 col = mix(white, irisCol, S(.1,.7,d)*.5);
-    // shadow, attenuated, and only above
-    // sat() avoids negative highlight colors below
-    col.rgb *= 1. - S(.45, .5, d) * .5*sat(uv.y);
+    // shadow, attenuated, and only at the inner bottom 
+    // sat() avoids negative highlight colors
+    col.rgb *= 1. - S(.45, .5, d) * .5*sat(-uv.y-uv.x);
     // make the outline of the iris
     col.rgb = mix(col.rgb, float3(0.), S(.3, .28, d));
     // make the iris color less flat
