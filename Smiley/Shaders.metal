@@ -84,9 +84,8 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     // instead make a rectangle
     float x = uv.x;
     float y = uv.y;
-    // and move it to the left
-    x += .2;
-    float mask = Rect(float2(x,y), -.2, .2, -.3, .3, .01);
+    // tapered at the top
+    float mask = Rect(float2(x,y), -.2+y*.2, .2-y*.2, -.3, .3, .01);
     
     // return the "fragColor" by multiplying white by the gradient mask
     float3 col = float3(1.,1.,1.) * mask;
