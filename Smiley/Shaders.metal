@@ -27,7 +27,7 @@ float remap01(float a, float b, float t)
 
 float remap(float a, float b, float c, float d, float t)
 {
-    return ((t-a)/(b-a) * (d-c) + c);
+    return sat(((t-a)/(b-a) * (d-c) + c));
 }
 
 float4 Eye(float2 uv)
@@ -58,6 +58,16 @@ float4 Head(float2 uv)
     
     // outline the smiley with a darker orange
     col.rbg = mix(col.rbg, float3(.6,.1,.3), S(.47, .48, d));
+    
+    // make highlight
+    float highlight = S(.41, .405, d);
+    
+    // start at the top (.41) and end at the middle (0.)
+    // make brightness = 0.75 at the top and 0. at 0.
+    // use uv.y because the gradient is across the y-coordinate
+    highlight *= remap(.41, .0, .75, .0, uv.y);
+    col.rgb = mix(col.rgb, float3(1.), highlight);
+    
     return col;
 }
 
