@@ -85,6 +85,10 @@ float4 Head(float2 uv)
 float4 Smiley(float2 uv)
 {
     float4 col = float4(0.);
+    
+    // mirror the left with the right side, so that the cheeks are mirrored
+    uv.x = abs(uv.x);
+    
     float4 head = Head(uv);
     col = mix(col, head, head.a);
     return col;
