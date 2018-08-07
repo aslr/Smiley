@@ -49,7 +49,9 @@ float4 Eye(float2 uv)
     float4 col = mix(white, irisCol, S(.1,.7,d)*.5);
     // make the outline of the iris
     col.rgb = mix(col.rgb, float3(0.), S(.3, .28, d));
-    // make the circle
+    // make the iris, making a slightly smaller circle
+    col.rgb = mix(col.rgb, irisCol.rgb, S(.28, .25, d));
+    // make the white of the eye
     col.a = S(.5, .48, d);
     return col;
 }
