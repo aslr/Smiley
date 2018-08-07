@@ -27,6 +27,10 @@ https://www.youtube.com/watch?v=bigjgiavOM0
 # Tutorial 4
 https://www.youtube.com/watch?v=jKuXA0trQPE
 
+# Tutorial 5 - Make a smiley
+https://www.youtube.com/watch?v=ZlNnrpM0TRg
+
+
 
 
 
