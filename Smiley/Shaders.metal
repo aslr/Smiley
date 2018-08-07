@@ -29,6 +29,13 @@
 //     return step1 * step2;
 // }
 //
+// float Rect(vec2 uv, float left, float right, float bottom, float top, float blur)
+// {
+//     float band1 = Band(uv.x, left, right, blur);
+//     float band2 = Band(uv.y, bottom, top, blur);
+//     return band1;
+// }
+//
 // float Smiley(vec2 uv, vec2 p, float size)
 // {
 //     uv -= p;
@@ -49,7 +56,7 @@
 //     uv.x *= iResolution.x/iResolution.y;
 //     vec3 col = vec3(0.);
 //     // float mask = Smiley(uv, vec2(0., .1), 1.);
-//     float mask = Band(uv.x, -.2, .2, .01);
+//     float mask = Rect(uv, -.2, .2, -.3, .3, .01);
 //     col = vec3(1.,1.,0)*mask;
 //     fragColor = vec4(vec3(c),1.0);
 // }
@@ -95,6 +102,13 @@ float Smiley(float2 uv, float2 p, float size)
      return step1 * step2;
  }
 
+ float Rect(float2 uv, float left, float right, float bottom, float top, float blur)
+ {
+     float band1 = Band(uv.x, left, right, blur);
+     float band2 = Band(uv.y, bottom, top, blur);
+     return band1 * band2;
+ }
+
 kernel void compute(texture2d<float,access::write> output [[texture(0)]],
                     constant float4 &time [[buffer(0)]],
                     uint2 gid [[thread_position_in_grid]])
@@ -114,8 +128,8 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     
     // don't make a smiley
     // float mask = Smiley(uv, float2(0.,0.), .5);
-    // instead make a vertical band
-    float mask = Band(uv.x, -.2, .2, .01);
+    // instead make a rectangle
+    float mask = Rect(uv, -.2, .2, -.3, .3, .01);
     
     // return the "fragColor" by multiplying whilte by the gradient mask
     float3 col = float3(1.,1.,1.) * mask;
