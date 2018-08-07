@@ -13,7 +13,7 @@ Each tutorial has its own branch. Checkout the corresponding branch to follow ea
 
 git checkout tutorial-1
 
-To see the videos that inspired this project, please check Art of Code's tutorials here:
+To see the videos that inspired this project, please check Martijn's tutorials here:
 
 # Tutorial 1
 https://www.youtube.com/watch?v=u5HAYVHsasc
