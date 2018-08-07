@@ -14,10 +14,21 @@
 // Including header shared between this Metal shader code and Swift/C code executing Metal API commands
 #import "ShaderTypes.h"
 
+using namespace metal;
+
 // macro for smoothstep
 #define S(a,b,t) smoothstep(a,b,t)
+#define sat(x) clamp(x, 0., 1.)
 
-using namespace metal;
+float remap01(float a, float b, float t)
+{
+    return sat((t-a)/(b-a));
+}
+
+float remap(float a, float b, float c, float d, float t)
+{
+    return ((t-a)/(b-a) * (d-c) + c);
+}
 
 float4 Eye(float2 uv)
 {
@@ -35,7 +46,9 @@ float4 Head(float2 uv)
 {
     float4 col = float4(.9, .65, .1, 1);
     float d = length(uv);
-    col.x = S(.5, .49, d);
+    col.r = S(.5, .49, d);
+    float edgeShade = remap01(.35, .5, d);
+    col.rgb *= 1 - edgeShade;
     return col;
 }
 
