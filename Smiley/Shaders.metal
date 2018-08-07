@@ -73,6 +73,10 @@ float4 Head(float2 uv)
     // make it into a circle and attenuate it by 60%
     // and make the edge softer
     float cheek = S(.2,.01, d) * .4;
+    
+    // make the edge sharper
+    cheek *= S(.17, .16, d);
+    
     // blend the background with a reddish color
     col.rgb = mix(col.rgb, float3(1., .1, .1), cheek);
     return col;
