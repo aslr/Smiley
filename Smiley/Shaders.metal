@@ -62,6 +62,19 @@ float Smiley(float2 uv, float2 p, float size)
      return band1 * band2;
  }
 
+float remap01(float a, float b, float t)
+{
+    // normalize time (0-1) by returning 0 if t = a
+    // and by return 1 if t = b and scale t based
+    // on the distance between b and a
+    return (t-a) / (b-a);
+}
+
+float remap(float a, float b, float c, float d, float t)
+{
+    return remap01(a,b,t) * (d-c) + c;
+}
+
 kernel void compute(texture2d<float,access::write> output [[texture(0)]],
                     constant float4 &time [[buffer(0)]],
                     uint2 gid [[thread_position_in_grid]])
@@ -87,9 +100,9 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     float m = -(x-.5)*(x+.5);
     m=.1*sin(t+x*8);
     float y = uv.y-m;
-    // tapered at the top
     
-    float mask = Rect(float2(x,y), -.5, .5, -.1, .1, .01);
+    float blur = remap(-.5, .5, .01, .25, x);
+    float mask = Rect(float2(x,y), -.5, .5, -.1, .1, blur);
     
     // return the "fragColor" by multiplying white by the gradient mask
     float3 col = float3(1.,1.,1.) * mask;
