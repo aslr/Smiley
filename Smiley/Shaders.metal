@@ -41,7 +41,8 @@
 //     uv -= .5;
 //     uv.x *= iResolution.x/iResolution.y;
 //     vec3 col = vec3(0.);
-//     float mask = Smiley(uv, vec2(0., .1), 1.);
+//     // float mask = Smiley(uv, vec2(0., .1), 1.);
+//     float mask = smoothstep(-.2,.2, uv.x);
 //     col = vec3(1.,1.,0)*mask;
 //     fragColor = vec4(vec3(c),1.0);
 // }
@@ -97,10 +98,12 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv -= 0.5;  // -0.5 <> 0.5
     uv.x *= iResolution.x/iResolution.y;
     
-    // make a smiley
-    float mask = Smiley(uv, float2(0.,0.), .5);
+    // don't make a smiley
+    // float mask = Smiley(uv, float2(0.,0.), .5);
+    // instead make a gradient across the x-axis
+    float mask = smoothstep(-.2, .2, uv.x);
     
-    // return the "fragColor" by multiplying yellow by the smiley mask
-    float3 col = float3(1.,1.,0.) * mask;
+    // return the "fragColor" by multiplying whilte by the gradient mask
+    float3 col = float3(1.,1.,1.) * mask;
     output.write(float4(col, 1), gid);
 }
