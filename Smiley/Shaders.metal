@@ -44,14 +44,20 @@ float4 Mouth(float2 uv)
 
 float4 Head(float2 uv)
 {
+    // make an orange background
     float4 col = float4(.9, .65, .1, 1);
+    
+    // mask the orange color into a circle
     float d = length(uv);
-    col.r = S(.5, .49, d);
+    col.a = S(.5, .49, d);
    
     // edgeshade with a non-linear falloff
     float edgeShade = remap01(.35, .5, d);
-    edgeShade = edgeShade * edgeShade;
+    edgeShade *= edgeShade;
     col.rgb *= 1 - edgeShade * .5;
+    
+    // outline the smiley with a darker orange
+    col.rbg = mix(col.rbg, float3(.6,.1,.3), S(.47, .48, d));
     return col;
 }
 
@@ -59,7 +65,7 @@ float4 Smiley(float2 uv)
 {
     float4 col = float4(0.);
     float4 head = Head(uv);
-    col = mix(col, head, head.x);
+    col = mix(col, head, head.a);
     return col;
 }
 
