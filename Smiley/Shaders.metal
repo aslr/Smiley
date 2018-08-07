@@ -62,10 +62,10 @@ float4 Head(float2 uv)
     // make highlight
     float highlight = S(.41, .405, d);
     
-    // start at the top (.41) and end at the middle (0.)
-    // make brightness = 0.75 at the top and 0. at 0.
+    // start at the top (.41) and end at past the middle (-.1)
+    // make brightness = 0.75 at the top and 0. at -.1
     // use uv.y because the gradient is across the y-coordinate
-    highlight *= remap(.41, .0, .75, .0, uv.y);
+    highlight *= remap(.41, -.1, .75, .0, uv.y);
     col.rgb = mix(col.rgb, float3(1.), highlight);
     
     return col;
