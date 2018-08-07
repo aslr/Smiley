@@ -40,10 +40,14 @@ float4 Eye(float2 uv)
 {
     // remap the coordinates to center at 0.
     uv -= .5;
-    // paint white
-    float4 col = float4(1.);
-    // make the circle
     float d = length(uv);
+    // set the white color of the eyes
+    float4 white = float4(1.);
+    // set the iris color (baby blue)
+    float4 irisCol = float4(.3,.5,1.,1.);
+    // blend the white and the iris colors and attenuate the latter by half
+    float4 col = mix(white, irisCol, S(.1,.7,d)*.5);
+    // make the circle
     col.a = S(.5, .48, d);
     return col;
 }
