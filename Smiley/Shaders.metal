@@ -8,7 +8,7 @@
 //  License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unsupported License.
 //  Email:countfrolic@gmail.com Twitter:@The_ArtOfCode
 //
-//  Adapted to Metal shader language by J. Varela
+//  Adapted to Metal shader language by J. Varela - Copyright, 2018
 //
 
 // File for Metal kernel and shader functions
@@ -89,7 +89,7 @@ float4 Brow(float2 uv)
     return col;
 }
 
-float4 Eye(float2 uv, float side, float2 m, float smile)
+float4 Eye(float2 uv, float side, float2 m, float smile, float t)
 {
     // remap the coordinates to center at 0.
     uv -= .5;
@@ -127,6 +127,7 @@ float4 Eye(float2 uv, float side, float2 m, float smile)
     pupilMask *= irisMask;
     col.rgb = mix(col.rgb, float3(.0), pupilMask);
     // highlight mask
+    uv.x += sin(t) *.3;
     float highlight = S(.1, .09, length(uv-float2(-.15,.15)));
     highlight += S(.07, .05, length(uv+float2(-.08,.08)));
     // blend the highlight using white
@@ -202,7 +203,7 @@ float4 Head(float2 uv)
     return col;
 }
 
-float4 Smiley(float2 uv, float2 m, float smile)
+float4 Smiley(float2 uv, float2 m, float smile, float t)
 {
     float4 col = float4(0.);
     
@@ -213,7 +214,7 @@ float4 Smiley(float2 uv, float2 m, float smile)
     float4 head = Head(uv);
     
     // make and place the eyes
-    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side, m, smile);
+    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side, m, smile, t);
     // make and place the mouth (use the rect (float4) to make it oval)
     float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)));
     // make the brows
@@ -248,8 +249,11 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     float2 m = input.xy / iResolution;
     m -= .5;
     
+    // get time
+    float time = input.w;
+    
     // apply the smiley onto the screen texture
     float smile = cos(input.w) * .5 + .5;
-    float4 col = Smiley(uv, m, smile);
+    float4 col = Smiley(uv, m, smile, time);
     output.write(col, gid);
 }
