@@ -121,8 +121,11 @@ float4 Eye(float2 uv, float side, float2 m, float smile)
     // make the pupil, giving it a slightly higher freedom to move
     // to give the eye a more 3D look
     d = length(uv-m*.6);
-    float pupilSize = mix(.2, .16, smile);
-    col.rgb = mix(col.rgb, float3(.0), S(pupilSize, pupilSize*.85, d));
+    float pupilSize = mix(.4, .16, smile);
+    // mask out the pupil if it grows bigger than the iris
+    float pupilMask = S(pupilSize, pupilSize*.85, d);
+    pupilMask *= irisMask;
+    col.rgb = mix(col.rgb, float3(.0), pupilMask);
     // highlight mask
     float highlight = S(.1, .09, length(uv-float2(-.15,.15)));
     highlight += S(.07, .05, length(uv+float2(-.08,.08)));
