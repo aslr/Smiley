@@ -13,7 +13,6 @@ import MetalKit
 class GameViewController: NSViewController {
 
     var renderer: Renderer!
-    var mtkView: MTKView!
 
     override func viewDidLoad()
     {
@@ -46,7 +45,22 @@ class GameViewController: NSViewController {
         mtkView.delegate = renderer
     }
     
-    override func mouseDown(with event: NSEvent)
+    override func viewDidAppear()
+    {
+        view.window!.acceptsMouseMovedEvents = true
+        
+        let options = NSTrackingArea.Options(rawValue:
+                NSTrackingArea.Options.mouseMoved.rawValue |
+                    NSTrackingArea.Options.activeInKeyWindow.rawValue | NSTrackingArea.Options.inVisibleRect.rawValue)
+        
+        let trackingArea = NSTrackingArea(rect: view.bounds,
+                                          options: options,
+                                          owner: self,
+                                          userInfo: nil)
+        view.addTrackingArea(trackingArea)
+    }
+    
+    override func mouseMoved(with event: NSEvent)
     {
         let viewCoordinates = view.convert(event.locationInWindow, from: nil)
         let mouse = view.convertToLayer(viewCoordinates)
