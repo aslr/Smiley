@@ -89,15 +89,18 @@ float4 Brow(float2 uv)
     return col;
 }
 
-float4 Eye(float2 uv, float side)
+float4 Eye(float2 uv, float side, float2 m)
 {
     // remap the coordinates to center at 0.
     uv -= .5;
-    // put d always before the mirroring prevention hack
-    // to avoid a vertical tear in the middle
+    
+    // calculate the distance without the mouse input before
+    // the unmirroring of the coordinates to prevent a tear
     float d = length(uv);
+    
     // prevent mirroring of the eyes
     uv.x *= side;
+    
     // set the iris color (baby blue)
     float4 irisCol = float4(.3,.5,1.,1.);
     // blend the white and the iris colors and attenuate the latter by half
@@ -106,6 +109,8 @@ float4 Eye(float2 uv, float side)
     // shadow, attenuated, and only at the inner bottom
     // sat() avoids negative highlight colors
     col.rgb *= 1. - S(.45, .5, d) * .5 * sat(-uv.y-uv.x*side);
+    // calculate the distance with the mouse coordinates
+    d = length(uv+m);
     // make the outline of the iris
     col.rgb = mix(col.rgb, float3(0.), S(.3, .28, d));
     // make the iris color less flat
@@ -120,8 +125,6 @@ float4 Eye(float2 uv, float side)
     highlight += S(.07, .05, length(uv+float2(-.08,.08)));
     // blend the highlight using white
     col.rgb = mix(col.rgb, float3(1.), highlight);
-    // make the white of the eye
-    col.a = S(.5, .48, d);
     return col;
 }
 
@@ -193,7 +196,7 @@ float4 Head(float2 uv)
     return col;
 }
 
-float4 Smiley(float2 uv)
+float4 Smiley(float2 uv, float2 m)
 {
     float4 col = float4(0.);
     
@@ -204,7 +207,7 @@ float4 Smiley(float2 uv)
     float4 head = Head(uv);
     
     // make and place the eyes
-    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side);
+    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side, m);
     // make and place the mouth (use the rect (float4) to make it oval)
     float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)));
     // make the brows
@@ -235,7 +238,12 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv -= 0.5;  // -0.5 <> 0.5
     uv.x *= iResolution.x/iResolution.y;
     
+    // normalized mouse input
+    float2 m = input.xy / iResolution;
+    // flip the y-coordinate
+    m.y = 0.5 - m.y;
+    
     // apply the smiley onto the screen texture
-    float4 col = Smiley(uv);
+    float4 col = Smiley(uv, m);
     output.write(col, gid);
 }

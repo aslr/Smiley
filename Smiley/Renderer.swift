@@ -13,10 +13,16 @@ import simd
 
 class Renderer: NSObject, MTKViewDelegate
 {
+    // time
     let timeStep = Float(1.0/60.0)
     var time = Float(0)
     
+    // mouse
+    var mouse = NSPoint(x: 0, y: 0)
+    
     public let device: MTLDevice
+    
+    // private ivars
     private var view:MTKView
     private let commandQueue: MTLCommandQueue
     private var pipelineState: MTLComputePipelineState!
@@ -69,7 +75,7 @@ class Renderer: NSObject, MTKViewDelegate
         {
             time += timeStep
             let inputBufferPtr = inputBuffer.contents().bindMemory(to: float4.self, capacity: 1)
-            inputBufferPtr.pointee = float4(0.0,0.0,0.0,time)
+            inputBufferPtr.pointee = float4(Float(mouse.x),Float(mouse.y),0.0,time)
             guard let commandBuffer = commandQueue.makeCommandBuffer() else { return }
             guard let commandEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
             commandEncoder.setComputePipelineState(pipelineState)
