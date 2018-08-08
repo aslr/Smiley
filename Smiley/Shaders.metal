@@ -89,7 +89,7 @@ float4 Brow(float2 uv)
     return col;
 }
 
-float4 Eye(float2 uv, float side, float2 m)
+float4 Eye(float2 uv, float side, float2 m, float smile)
 {
     // remap the coordinates to center at 0.
     uv -= .5;
@@ -121,7 +121,8 @@ float4 Eye(float2 uv, float side, float2 m)
     // make the pupil, giving it a slightly higher freedom to move
     // to give the eye a more 3D look
     d = length(uv-m*.6);
-    col.rgb = mix(col.rgb, float3(.0), S(.16, .14, d));
+    float pupilSize = mix(.2, .16, smile);
+    col.rgb = mix(col.rgb, float3(.0), S(pupilSize, pupilSize*.85, d));
     // highlight mask
     float highlight = S(.1, .09, length(uv-float2(-.15,.15)));
     highlight += S(.07, .05, length(uv+float2(-.08,.08)));
@@ -198,7 +199,7 @@ float4 Head(float2 uv)
     return col;
 }
 
-float4 Smiley(float2 uv, float2 m)
+float4 Smiley(float2 uv, float2 m, float smile)
 {
     float4 col = float4(0.);
     
@@ -209,7 +210,7 @@ float4 Smiley(float2 uv, float2 m)
     float4 head = Head(uv);
     
     // make and place the eyes
-    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side, m);
+    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side, m, smile);
     // make and place the mouth (use the rect (float4) to make it oval)
     float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)));
     // make the brows
@@ -242,10 +243,10 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     
     // normalized mouse input
     float2 m = input.xy / iResolution;
-    // normalize the mouse input
     m -= .5;
     
     // apply the smiley onto the screen texture
-    float4 col = Smiley(uv, m);
+    float smile = cos(input.w) * .5 + .5;
+    float4 col = Smiley(uv, m, smile);
     output.write(col, gid);
 }
