@@ -262,8 +262,9 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     // normalized mouse input
     float2 m = input.xy / iResolution;
     m -= .5;
-    // make smiley follow the cursor
-    uv -= m*length(uv);
+    // make smiley follow the cursor by squaring the maximum value of
+    // the coordinate system 0.5*0.5 and the uv coordinates
+    uv -= m*(.25-dot(uv,uv));
     
     // get time
     float time = input.w;
