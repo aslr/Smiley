@@ -20,7 +20,7 @@ class Renderer: NSObject, MTKViewDelegate
     private var view:MTKView
     private let commandQueue: MTLCommandQueue
     private var pipelineState: MTLComputePipelineState!
-    private var timeBuffer: MTLBuffer!
+    private var inputBuffer: MTLBuffer!
     
     // ---------------------------------------------------------------------------------
     // init
@@ -44,7 +44,7 @@ class Renderer: NSObject, MTKViewDelegate
         do {
             if let kernel = library.makeFunction(name: "compute")
             {
-                self.timeBuffer = device.makeBuffer(length: MemoryLayout<float4>.size, options: [])
+                self.inputBuffer = device.makeBuffer(length: MemoryLayout<float4>.size, options: [])
                 return try device.makeComputePipelineState(function: kernel)
             }
             else
@@ -68,13 +68,13 @@ class Renderer: NSObject, MTKViewDelegate
         if let drawable = view.currentDrawable
         {
             time += timeStep
-            let timeBufferPtr = timeBuffer.contents().bindMemory(to: float4.self, capacity: 1)
-            timeBufferPtr.pointee = float4(0.0,0.0,0.0,time)
+            let inputBufferPtr = inputBuffer.contents().bindMemory(to: float4.self, capacity: 1)
+            inputBufferPtr.pointee = float4(0.0,0.0,0.0,time)
             guard let commandBuffer = commandQueue.makeCommandBuffer() else { return }
             guard let commandEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
             commandEncoder.setComputePipelineState(pipelineState)
             commandEncoder.setTexture(drawable.texture, index: 0)
-            commandEncoder.setBuffer(timeBuffer, offset: 0, index: 0)
+            commandEncoder.setBuffer(inputBuffer, offset: 0, index: 0)
             let threadGroupCount = MTLSizeMake(2, 2, 1)
             let threadGroups = MTLSizeMake(drawable.texture.width / threadGroupCount.width, drawable.texture.height / threadGroupCount.height, 1)
             commandEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCount)
