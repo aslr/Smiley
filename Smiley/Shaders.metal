@@ -162,7 +162,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     int height = output.get_height();
     
     // set its resolution
-    float2 iResolution = float2(width, height);  // 0 <> 1
+    float2 iResolution = float2(width, height);
     
     // compute the texture coordinates with the y-coordinate flipped
     // because the origin of Shadertoy's and Metal's y-coordinates differ
@@ -170,7 +170,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     uv -= 0.5;  // -0.5 <> 0.5
     uv.x *= iResolution.x/iResolution.y;
     
-    // make a black screen with a skeleton smiley function
+    // apply the smiley onto the screen texture
     float4 col = Smiley(uv);
     output.write(col, gid);
 }
