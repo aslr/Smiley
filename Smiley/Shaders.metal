@@ -127,7 +127,11 @@ float4 Eye(float2 uv, float side, float2 m, float smile, float t)
     pupilMask *= irisMask;
     col.rgb = mix(col.rgb, float3(.0), pupilMask);
     // highlight mask
-    uv.x += sin(t) *.3;
+    // move the highlight by an offset
+    t*= 3.;
+    float2 offs = float2(sin(t+uv.y*25.), sin(t+uv.x*25.));
+    offs *= .01;
+    uv += offs;
     float highlight = S(.1, .09, length(uv-float2(-.15,.15)));
     highlight += S(.07, .05, length(uv+float2(-.08,.08)));
     // blend the highlight using white
