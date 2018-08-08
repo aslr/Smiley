@@ -41,6 +41,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		842CBE56211B0477008AB87B /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				845EB64F21171B47007F4DD1 /* Renderer.swift */,
+				845EB64B21171B47007F4DD1 /* AppDelegate.swift */,
+				845EB64D21171B47007F4DD1 /* GameViewController.swift */,
+				845EB65621171B49007F4DD1 /* Main.storyboard */,
+				845EB65A21171B49007F4DD1 /* Smiley.entitlements */,
+				845EB65921171B49007F4DD1 /* Info.plist */,
+			);
+			name = Engine;
+			sourceTree = "<group>";
+		};
 		845EB63F21171B47007F4DD1 = {
 			isa = PBXGroup;
 			children = (
@@ -62,14 +75,9 @@
 		845EB64A21171B47007F4DD1 /* Smiley */ = {
 			isa = PBXGroup;
 			children = (
-				845EB64B21171B47007F4DD1 /* AppDelegate.swift */,
-				845EB64D21171B47007F4DD1 /* GameViewController.swift */,
-				845EB64F21171B47007F4DD1 /* Renderer.swift */,
 				845EB65121171B47007F4DD1 /* Shaders.metal */,
 				845EB65321171B48007F4DD1 /* ShaderTypes.h */,
-				845EB65621171B49007F4DD1 /* Main.storyboard */,
-				845EB65921171B49007F4DD1 /* Info.plist */,
-				845EB65A21171B49007F4DD1 /* Smiley.entitlements */,
+				842CBE56211B0477008AB87B /* Engine */,
 			);
 			path = Smiley;
 			sourceTree = "<group>";
