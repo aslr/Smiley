@@ -148,14 +148,17 @@ float4 Mouth(float2 uv, float smile)
     float4 col = float4(.5, .18, .05, 1.);
     // scale the mouth down
     uv.y *= 1.5;
-    // pull the mouth corners up
+    // pull the mouth corners up and down
     uv.y -= uv.x * uv.x * 2 * smile;
+    // make the mouth wider or narrower
     uv.x *= mix(2.5, 1., smile);
     // blur the edge of the mouth
     float d = length(uv);
     col.a = S(.5, .48, d);
     // teeth
-    float td = length(uv-float2(0., .6));
+    float2 tUV = uv;
+    tUV.y+= abs(uv.x)*.5+.1;
+    float td = length(tUV-float2(0., .6));
     // blend with white and add drop shadow
     float3 toothCol = float3(1.)*S(.6, .35, d);
     col.rgb = mix(col.rgb, toothCol, S(.4,.37,td));
