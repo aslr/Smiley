@@ -140,7 +140,7 @@ float4 Eye(float2 uv, float side, float2 m, float smile, float t)
     return col;
 }
 
-float4 Mouth(float2 uv)
+float4 Mouth(float2 uv, float smile)
 {
     // normalize coordinates
     uv -= .5;
@@ -149,7 +149,8 @@ float4 Mouth(float2 uv)
     // scale the mouth down
     uv.y *= 1.5;
     // pull the mouth corners up
-    uv.y -= uv.x * uv.x * 2;
+    uv.y -= uv.x * uv.x * 2 * smile;
+    uv.x *= mix(2.5, 1., smile);
     // blur the edge of the mouth
     float d = length(uv);
     col.a = S(.5, .48, d);
@@ -221,7 +222,7 @@ float4 Smiley(float2 uv, float2 m, float smile, float t)
     // make and place the eyes
     float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side, m, smile, t);
     // make and place the mouth (use the rect (float4) to make it oval)
-    float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)));
+    float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)), smile);
     // make the brows
     float4 brow = Brow(within(uv, float4(.03, .2, .4, .45)));
     
