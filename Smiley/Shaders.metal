@@ -93,10 +93,11 @@ float4 Eye(float2 uv, float side)
 {
     // remap the coordinates to center at 0.
     uv -= .5;
+    // put d always before the mirroring prevention hack
+    // to avoid a vertical tear in the middle
+    float d = length(uv);
     // prevent mirroring of the eyes
     uv.x *= side;
-    
-    float d = length(uv);
     // set the iris color (baby blue)
     float4 irisCol = float4(.3,.5,1.,1.);
     // blend the white and the iris colors and attenuate the latter by half
