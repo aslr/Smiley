@@ -117,6 +117,9 @@ float4 Head(float2 uv)
     // make brightness = 0.75 at the top and 0. at -.1
     // use uv.y because the gradient is across the y-coordinate
     highlight *= remap(.41, -.1, .75, .0, uv.y);
+    // use the highlight to show the eye sockets
+    highlight *= S(.18, .19, length(uv-float2(.21, .07)));
+    // blend with the white color of the highlight
     col.rgb = mix(col.rgb, float3(1.), highlight);
     
     // position of one cheek
