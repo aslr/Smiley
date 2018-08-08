@@ -3,7 +3,12 @@
 //  Smiley
 //
 //  Created by João Varela on 05/08/2018.
-//  Copyright © 2018 João Varela. All rights reserved.
+//
+//  "Smiley Tutorial" by Martijn Steinrucken aka BigWings - Copyright, 2017-2018
+//  License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unsupported License.
+//  Email:countfrolic@gmail.com Twitter:@The_ArtOfCode
+//
+//  Adapted to Metal shader language by J. Varela
 //
 
 // File for Metal kernel and shader functions
@@ -16,7 +21,7 @@
 
 using namespace metal;
 
-// macro for smoothstep
+// macros
 #define S(a,b,t) smoothstep(a,b,t)
 #define sat(x) clamp(x, 0., 1.)
 
@@ -34,6 +39,54 @@ float remap(float a, float b, float c, float d, float t)
 float2 within(float2 uv, float4 rect)
 {
     return (uv-rect.xy)/(rect.zw-rect.xy);
+}
+
+float4 Brow(float2 uv)
+{
+    // save the original y-coordinate for later
+    float y = uv.y;
+    // skew the brows down
+    uv.y += uv.x*.8-.3;
+    // pull the brows apart
+    uv.x -= .1;
+    uv -= .5;
+    
+    float4 col = float4(0.);
+    float blur = .1;
+    
+    // make the brows out of two circles
+    // circle #1
+    float d1 = length(uv);
+    float s1 = S(.45, .45-blur, d1);
+    // circle #2 which is offset from circle #1
+    float d2 = length(uv-float2(.1, -.2)*.7);
+    float s2 = S(.5,.5-blur,d2);
+    // subtract circle #2 from circle #1
+    float browMask = sat(s1-s2);
+    
+    float colMask = remap01(.7, .8, y)*.75;
+    // remove the top highlight from the gradient below
+    colMask *= S(.6,.9, browMask);
+    // make a brown gradient
+    float4 browCol = mix(float4(.4,.2,.2,1.), float4(1.,.75, .5, 1.), colMask);
+    
+    // make shadows beneath the brows
+    // move the shadows up
+    uv.y += .15;
+    // add blur to the shadows
+    blur += .1;
+    // circle #1
+    d1 = length(uv);
+    s1 = S(.45, .45-blur, d1);
+    // circle #2 which is offset from circle #1
+    d2 = length(uv-float2(.1,-.2)*.7);
+    s2 = S(.5,.5-blur, d2);
+    // subtract circle #2 from circle #1
+    float shadowMask = sat(s1-s2);
+    // blend
+    col = mix(col, float4(0.,0.,0.,1.), S(.0,1.,shadowMask)*.5);
+    col = mix(col, browCol, S(.2,.4, browMask));
+    return col;
 }
 
 float4 Eye(float2 uv)
@@ -148,11 +201,14 @@ float4 Smiley(float2 uv)
     float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)));
     // make and place the mouth (use the rect (float4) to make it oval)
     float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)));
+    // make the brows
+    float4 brow = Brow(within(uv, float4(.03, .2, .4, .45)));
     
     // blend everything
     col = mix(col, head, head.a);
     col = mix(col, eye, eye.a);
     col = mix(col, mouth, mouth.a);
+    col = mix(col, brow, brow.a);
     return col;
 }
 
