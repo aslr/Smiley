@@ -41,8 +41,11 @@ float2 within(float2 uv, float4 rect)
     return (uv-rect.xy)/(rect.zw-rect.xy);
 }
 
-float4 Brow(float2 uv)
+float4 Brow(float2 uv, float smile)
 {
+    // make the eyebrows come down or up
+    float offs = mix(.2, 0., smile);
+    uv.y += offs;
     // save the original y-coordinate for later
     float y = uv.y;
     // skew the brows down
@@ -71,8 +74,9 @@ float4 Brow(float2 uv)
     float4 browCol = mix(float4(.4,.2,.2,1.), float4(1.,.75, .5, 1.), colMask);
     
     // make shadows beneath the brows
-    // move the shadows up
-    uv.y += .15;
+    // move the shadows up but prevent the shadows to move
+    // when smiling by removing the offs added above
+    uv.y += .15 - offs;
     // add blur to the shadows
     blur += .1;
     // circle #1
@@ -157,7 +161,7 @@ float4 Mouth(float2 uv, float smile)
     col.a = S(.5, .48, d);
     // teeth
     float2 tUV = uv;
-    tUV.y+= abs(uv.x)*.5+.1;
+    tUV.y+= (abs(uv.x)*.5+.1)*(1 - smile);
     float td = length(tUV-float2(0., .6));
     // blend with white and add drop shadow
     float3 toothCol = float3(1.)*S(.6, .35, d);
@@ -227,7 +231,7 @@ float4 Smiley(float2 uv, float2 m, float smile, float t)
     // make and place the mouth (use the rect (float4) to make it oval)
     float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)), smile);
     // make the brows
-    float4 brow = Brow(within(uv, float4(.03, .2, .4, .45)));
+    float4 brow = Brow(within(uv, float4(.03, .2, .4, .45)), smile);
     
     // blend everything
     col = mix(col, head, head.a);
