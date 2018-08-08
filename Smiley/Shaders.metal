@@ -49,7 +49,7 @@ float4 Brow(float2 uv, float smile)
     // save the original y-coordinate for later
     float y = uv.y;
     // skew the brows down
-    uv.y += uv.x*.8-.3;
+    uv.y += uv.x*mix(.5, .8, smile) - .3;
     // pull the brows apart
     uv.x -= .1;
     uv -= .5;
@@ -70,15 +70,16 @@ float4 Brow(float2 uv, float smile)
     float colMask = remap01(.7, .8, y)*.75;
     // remove the top highlight from the gradient below
     colMask *= S(.6,.9, browMask);
+    colMask *= smile;
     // make a brown gradient
     float4 browCol = mix(float4(.4,.2,.2,1.), float4(1.,.75, .5, 1.), colMask);
     
     // make shadows beneath the brows
     // move the shadows up but prevent the shadows to move
     // when smiling by removing the offs added above
-    uv.y += .15 - offs;
+    uv.y += .15 - offs * .5;
     // add blur to the shadows
-    blur += .1;
+    blur += mix(.0, .1, smile);
     // circle #1
     d1 = length(uv);
     s1 = S(.45, .45-blur, d1);
