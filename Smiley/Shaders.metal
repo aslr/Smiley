@@ -89,26 +89,29 @@ float4 Brow(float2 uv)
     return col;
 }
 
-float4 Eye(float2 uv)
+float4 Eye(float2 uv, float side)
 {
     // remap the coordinates to center at 0.
     uv -= .5;
+    // prevent mirroring of the eyes
+    uv.x *= side;
+    
     float d = length(uv);
-    // set the white color of the eyes
-    float4 white = float4(1.);
     // set the iris color (baby blue)
     float4 irisCol = float4(.3,.5,1.,1.);
     // blend the white and the iris colors and attenuate the latter by half
-    float4 col = mix(white, irisCol, S(.1,.7,d)*.5);
+    float4 col = mix(float4(1.), irisCol, S(.1,.7,d)*.5);
+    col.a = S(.5, .48, d);
     // shadow, attenuated, and only at the inner bottom
     // sat() avoids negative highlight colors
-    col.rgb *= 1. - S(.45, .5, d) * .5*sat(-uv.y-uv.x);
+    col.rgb *= 1. - S(.45, .5, d) * .5 * sat(-uv.y-uv.x*side);
     // make the outline of the iris
     col.rgb = mix(col.rgb, float3(0.), S(.3, .28, d));
     // make the iris color less flat
     irisCol.rgb *= 1. + S(.3,.05, d);
     // make the iris, making a slightly smaller circle
-    col.rgb = mix(col.rgb, irisCol.rgb, S(.28, .25, d));
+    float irisMask = S(.28, .25, d);
+    col.rgb = mix(col.rgb, irisCol.rgb, irisMask);
     // make the pupil
     col.rgb = mix(col.rgb, float3(.0), S(.16, .14, d));
     // highlight mask
@@ -171,7 +174,7 @@ float4 Head(float2 uv)
     // use uv.y because the gradient is across the y-coordinate
     highlight *= remap(.41, -.1, .75, .0, uv.y);
     // use the highlight to show the eye sockets
-    highlight *= S(.18, .19, length(uv-float2(.21, .07)));
+    highlight *= S(.18, .19, length(uv-float2(.21, .08)));
     // blend with the white color of the highlight
     col.rgb = mix(col.rgb, float3(1.), highlight);
     
@@ -193,12 +196,14 @@ float4 Smiley(float2 uv)
 {
     float4 col = float4(0.);
     
-    // mirror the left with the right side, so that the cheeks are mirrored
+    // use side to prevent the mirroring of the eyes
+    float side = sign(uv.x);
+    // mirror the left with the right side for the rest
     uv.x = abs(uv.x);
     float4 head = Head(uv);
     
     // make and place the eyes
-    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)));
+    float4 eye = Eye(within(uv, float4(.03, -.1, .37, .25)), side);
     // make and place the mouth (use the rect (float4) to make it oval)
     float4 mouth = Mouth(within(uv, float4(-.3, -.4, .3, -.1)));
     // make the brows
