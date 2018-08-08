@@ -4,7 +4,7 @@
 //
 //  Created by João Varela on 05/08/2018.
 //
-//  "Smiley Tutorial" by Martijn Steinrucken aka BigWings - Copyright, 2017-2018
+//  "Smiley Tutorial" by Martijn Steinrucken aka BigWings aka The Art Of Code - Copyright, 2017-2018
 //  License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unsupported License.
 //  Email:countfrolic@gmail.com Twitter:@The_ArtOfCode
 //
