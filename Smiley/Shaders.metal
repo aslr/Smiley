@@ -118,7 +118,9 @@ float4 Eye(float2 uv, float side, float2 m)
     // make the iris, making a slightly smaller circle
     float irisMask = S(.28, .25, d);
     col.rgb = mix(col.rgb, irisCol.rgb, irisMask);
-    // make the pupil
+    // make the pupil, giving it a slightly higher freedom to move
+    // to give the eye a more 3D look
+    d = length(uv-m*.6);
     col.rgb = mix(col.rgb, float3(.0), S(.16, .14, d));
     // highlight mask
     float highlight = S(.1, .09, length(uv-float2(-.15,.15)));
