@@ -49,9 +49,9 @@ float4 Brow(float2 uv, float smile)
     // save the original y-coordinate for later
     float y = uv.y;
     // skew the brows down
-    uv.y += uv.x*mix(.5, .8, smile) - .3;
+    uv.y += uv.x*mix(.5, .8, smile) - mix(.1,.3, smile);
     // pull the brows apart
-    uv.x -= .1;
+    uv.x -= mix(0, .1, smile);
     uv -= .5;
     
     float4 col = float4(0.);
