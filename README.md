@@ -30,6 +30,8 @@ https://www.youtube.com/watch?v=jKuXA0trQPE
 # Tutorial 5 - Make a smiley
 https://www.youtube.com/watch?v=ZlNnrpM0TRg
 
+# Tutorial 6 - Animate a smiley
+https://www.youtube.com/watch?v=vlD_KOrzGDc
 
 
 
