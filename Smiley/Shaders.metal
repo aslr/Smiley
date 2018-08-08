@@ -263,7 +263,7 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     float2 m = input.xy / iResolution;
     m -= .5;
     // make smiley follow the cursor
-    uv -= m;
+    uv -= m*length(uv);
     
     // get time
     float time = input.w;
