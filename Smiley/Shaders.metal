@@ -110,7 +110,7 @@ float4 Eye(float2 uv, float side, float2 m)
     // sat() avoids negative highlight colors
     col.rgb *= 1. - S(.45, .5, d) * .5 * sat(-uv.y-uv.x*side);
     // calculate the distance with the mouse coordinates
-    d = length(uv+m);
+    d = length(uv-m*.5);
     // make the outline of the iris
     col.rgb = mix(col.rgb, float3(0.), S(.3, .28, d));
     // make the iris color less flat
@@ -240,8 +240,8 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
     
     // normalized mouse input
     float2 m = input.xy / iResolution;
-    // flip the y-coordinate
-    m.y = 0.5 - m.y;
+    // normalize the mouse input
+    m -= .5;
     
     // apply the smiley onto the screen texture
     float4 col = Smiley(uv, m);
