@@ -33,6 +33,11 @@ https://www.youtube.com/watch?v=ZlNnrpM0TRg
 # Tutorial 6 - Animate a smiley
 https://www.youtube.com/watch?v=vlD_KOrzGDc
 
+The Shadertoy version can be seen here:
+https://www.shadertoy.com/view/lsXcWn
+
+
+
 
 
 
