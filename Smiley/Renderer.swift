@@ -83,8 +83,10 @@ class Renderer: NSObject, MTKViewDelegate
             commandEncoder.setBuffer(inputBuffer, offset: 0, index: 0)
             let w = pipelineState.threadExecutionWidth
             let h = pipelineState.maxTotalThreadsPerThreadgroup / w;
-            let threadGroupCount = MTLSizeMake(w, h, 1)
-            let threadGroups = MTLSizeMake(drawable.texture.width / threadGroupCount.width, drawable.texture.height / threadGroupCount.height, 1)
+            let threadGroupCount = MTLSize(width: w, height: h, depth: 1)
+            let threadGroups = MTLSize(width: (drawable.texture.width + w - 1) / w,
+                                       height: (drawable.texture.height + h - 1) / h,
+                                       depth: 1)
             commandEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCount)
             commandEncoder.endEncoding()
             commandBuffer.present(drawable)

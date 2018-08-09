@@ -247,8 +247,8 @@ kernel void compute(texture2d<float,access::write> output [[texture(0)]],
                     uint2 gid [[thread_position_in_grid]])
 {
     // get the width and height of the screen texture
-    int width = output.get_width();
-    int height = output.get_height();
+    uint width = output.get_width();
+    uint height = output.get_height();
     
     // set its resolution
     float2 iResolution = float2(width, height);
